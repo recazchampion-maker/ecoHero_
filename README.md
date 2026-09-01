@@ -1,2 +1,18 @@
-# ecoHero_
-🌍 An interactive eco-friendly game that turns sustainable habits into fun challenges
+# EcoHero Web App 🌱
+
+نسخة Web App كاملة من فكرة EcoHero، مبنية بـ HTML + CSS + JavaScript.
+
+## المميزات
+- نظام XP وتدرج مستويات.
+- تغير صورة الكوكب تلقائيًا حسب التقدم.
+- تحديات عشوائية + إكمال التحدي + مكافأة XP.
+- Badges تُفتح تلقائيًا عند الوصول للـ XP المطلوب.
+- حفظ التقدم باستخدام localStorage.
+- حاسبة توفير المياه، وتدخل نتائجها في الإحصائيات.
+- دليل تدوير للبلاستيك والورق والزجاج والبطاريات.
+- قراءة التحدي بالصوت عبر Speech Synthesis.
+- مؤثر صوتي عند إكمال التحدي.
+- تصميم responsive للموبايل والكمبيوتر.
+
+## التشغيل
+افتح `index.html` في المتصفح. لا توجد مكتبات JavaScript خارجية مطلوبة.

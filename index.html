@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#4caf50">
+  <title>EcoHero 🌱 — البطل البيئي</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <div id="badgeModal" class="modal hidden">
+    <div class="modal-card">
+      <button class="modal-close" data-close="badgeModal">×</button>
+      <img id="modalBadgeImg" src="assets/10_ecohereo_badge.png" alt="Badge">
+      <h2 id="modalBadgeTitle">مبروك! 🎉</h2>
+      <p id="modalBadgeText">لقد فتحت إنجازًا جديدًا.</p>
+      <button class="primary" data-close="badgeModal">رائع! 🚀</button>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand" data-page="home"><img src="assets/01_logo_ecohereo.png" alt="EcoHero"><span>EcoHero</span></div>
+    <div class="top-actions"><button id="soundBtn" class="icon-btn" title="الصوت">🔊</button><button id="resetBtn" class="icon-btn" title="إعادة البداية">↻</button></div>
+  </header>
+
+  <main class="app-shell">
+    <section id="home" class="page active">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <span class="eyebrow">كل خطوة صغيرة بتفرق 🌍💚</span>
+          <h1>مرحبًا يا بطل! 👋</h1>
+          <p id="motivation">ابدأ رحلتك وخلي كوكبنا أخضر أكتر.</p>
+          <div class="level-line"><strong id="levelName">🌱 المبتدئ البيئي</strong><span id="xpText">0 / 20 XP</span></div>
+          <div class="progress"><div id="xpBar" class="progress-fill"></div></div>
+          <div class="stats"><div><b id="xpStat">0</b><span>XP</span></div><div><b id="completedStat">0</b><span>تحديات</span></div><div><b id="waterStat">0</b><span>لتر موفَّر</span></div></div>
+        </div>
+        <div class="planet-wrap"><div id="planetGlow"></div><img id="planet" src="assets/02_planet_level1.png" alt="Planet"><span id="levelPill">Level 1</span></div>
+      </div>
+
+      <div class="section-title"><div><span>🎯</span><h2>تحديك دلوقتي 🎯</h2></div><span id="challengeCategory" class="chip">بيظهر لوحده</span></div>
+      <div class="challenge-card">
+        <img id="challengeIcon" src="assets/13_water_icon.png" alt="Challenge">
+        <div class="challenge-content"><h3 id="challengeTitle">التحدي هيظهر لوحده 😉</h3><p id="challengeDescription">جاوب على الأسئلة، وبعد كل سؤالين هيجيلك تحدي عملي تلقائيًا.</p><div class="challenge-actions"><button id="getChallenge" class="primary" style="display:none">🎯 احصل على التحدي</button><button id="speakChallenge" class="secondary" disabled>🔊 اسمع التحدي</button><button id="completeChallenge" class="success" disabled>✅ أنجزت المهمة</button></div></div>
+      </div>
+
+      <div class="quick-grid"><button class="quick-card" data-page="achievements"><span>🏆</span><b>إنجازاتي</b><small>شوف الـ Badges اللي فتحتها</small></button><button class="quick-card" data-page="tools"><span>🌱</span><b>أدوات بيئية</b><small>احسب التوفير واتعلم التدوير</small></button></div>
+    </section>
+
+    <section id="achievements" class="page">
+      <div class="page-heading"><div><span>🏆</span><div><h1>إنجازاتي</h1><p>كل إنجاز يقربك من EcoHero الحقيقي.</p></div></div><button class="back-home" data-page="home">🏠 الرئيسية</button></div>
+      <div class="score-card"><div><span>⭐ إجمالي النقاط</span><strong id="totalScore">0 XP</strong></div><div><span>المستوى</span><strong id="myLevel">🌱 المبتدئ البيئي</strong></div></div>
+      <div id="badgesGrid" class="badges-grid"></div>
+    </section>
+
+    <section id="tools" class="page">
+      <div class="page-heading"><div><span>🌱</span><div><h1>أدوات بيئية</h1><p>أدوات بسيطة تساعدك تاخد قرارات أفضل للكوكب.</p></div></div><button class="back-home" data-page="home">🏠 الرئيسية</button></div>
+      <div class="tool-card">
+        <div class="tool-head"><img src="assets/13_water_icon.png" alt="Water"><div><h2>💧 حاسبة وفر المياه</h2><p>كم دقيقة أغلقت الصنبور؟</p></div></div>
+        <div class="water-form"><input id="minutes" type="number" min="0" inputmode="numeric" placeholder="اكتب الدقائق"><span>دقيقة</span><button id="calculateWater" class="primary">احسب 💧</button></div>
+        <div id="waterResult" class="result">أدخل الدقائق ثم اضغط احسب.</div>
+      </div>
+      <div class="tool-card"><div class="tool-head"><img src="assets/15_recycle_icon.png" alt="Recycle"><div><h2>♻️ دليل التدوير</h2><p>اختر المادة لمعرفة النصيحة.</p></div></div><div class="recycle-grid"><button data-tip="plastic"><img src="assets/17_plastic_icon.png">بلاستيك</button><button data-tip="paper"><img src="assets/18_paper_icon.png">ورق</button><button data-tip="glass"><img src="assets/19_glass_icon.png">زجاج</button><button data-tip="battery"><img src="assets/20_battery_icon.png">بطارية</button></div><div id="recycleTip" class="tip">اختر مادة من الأعلى.</div></div>
+      <div class="fact-card"><span>💡</span><div><h3>هل تعلم؟</h3><p id="factText">إعادة استخدام الأشياء بدل التخلص منها تساعد على تقليل النفايات وحماية موارد الكوكب 🌍</p></div></div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav"><button class="nav-btn active" data-page="home"><span>🏠</span><small>الرئيسية</small></button><button class="nav-btn" data-page="achievements"><span>🏆</span><small>إنجازاتي</small></button><button class="nav-btn" data-page="tools"><span>🌱</span><small>أدوات</small></button></nav>
+  <script src="js/app.js"></script>
+</body>
+</html>

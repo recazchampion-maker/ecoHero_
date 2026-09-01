@@ -1,0 +1,44 @@
+const A='assets/';
+const challenges=[
+ {id:1,cat:'مياه',icon:'13_water_icon.png',title:'استخدم كوبك القابل لإعادة الاستخدام اليوم 💧',desc:'بدل شراء زجاجة بلاستيك جديدة، استخدم زجاجتك أو كوبك الشخصي.'},
+ {id:2,cat:'تدوير',icon:'15_recycle_icon.png',title:'افصل ورقًا أو كرتونًا للتدوير ♻️',desc:'اجمع الورق والكرتون النظيف وضعه في حاوية التدوير المناسبة.'},
+ {id:3,cat:'بلاستيك',icon:'17_plastic_icon.png',title:'تجنب قطعة بلاستيك للاستخدام مرة واحدة 🧴',desc:'استبدلها ببديل قابل لإعادة الاستخدام.'},
+ {id:4,cat:'طاقة',icon:'16_energy_icon.png',title:'أطفئ جهازًا لا تحتاجه الآن ⚡',desc:'خطوة صغيرة في ترشيد الطاقة تصنع فرقًا مع الوقت.'},
+ {id:5,cat:'طبيعة',icon:'14_tree_icon.png',title:'ازرع أو اعتنِ بنبات اليوم 🌳',desc:'اسقِ نباتًا أو ازرع بذرة واهتم بها.'},
+ {id:6,cat:'نظافة',icon:'06_hero_character.png',title:'التقط 3 قطع قمامة حولك 🌍',desc:'اجعل مكانك أنظف، وتخلص من النفايات بالطريقة المناسبة.'}
+];
+const levels=[
+ {min:0,name:'🌱 المبتدئ البيئي',planet:'02_planet_level1.png',max:20},
+ {min:20,name:'🌿 صديق الطبيعة',planet:'03_planet_level2.png',max:50},
+ {min:50,name:'🌳 حارس الكوكب',planet:'04_planet_level3.png',max:100},
+ {min:100,name:'🏆 EcoHero',planet:'05_planet_level4.png',max:150}
+];
+const badges=[
+ {id:'water',min:20,title:'💧 حارس الماء',locked:'11_water_badge_locked.png',open:'07_water_badge.png',desc:'أكمل 20 XP لفتحه.'},
+ {id:'tree',min:50,title:'🌳 صديق الأشجار',locked:'11_water_badge_locked.png',open:'08_nature_badge.png',desc:'أكمل 50 XP لفتحه.'},
+ {id:'recycle',min:100,title:'♻️ بطل التدوير',locked:'12_recycle_badge_locked.png',open:'09_recycle_badge.png',desc:'أكمل 100 XP لفتحه.'},
+ {id:'hero',min:150,title:'🌍 EcoHero',locked:'12_recycle_badge_locked.png',open:'10_ecohereo_badge.png',desc:'أكمل 150 XP لفتحه.'}
+];
+const tips={plastic:'🧴 البلاستيك: حاول إعادة استخدامه أو وضعه في حاوية التدوير المناسبة.',paper:'📦 الورق: افصل الورق والكرتون عن باقي النفايات وضعه في حاوية التدوير المناسبة.',glass:'🍾 الزجاج: افصل الزجاج عن باقي النفايات وتخلص منه في المكان المخصص.',battery:'🔋 البطاريات: لا تضعها في القمامة العادية. استخدم نقطة جمع مخصصة للبطاريات إن كانت متاحة.'};
+let state=JSON.parse(localStorage.getItem('ecoHeroState')||'null')||{xp:0,completed:0,water:0,completedIds:[],lastChallenge:null,sound:true};
+let challenge=null;
+function save(){localStorage.setItem('ecoHeroState',JSON.stringify(state));}
+function levelFor(xp){return [...levels].reverse().find(l=>xp>=l.min)||levels[0]}
+function currentLevelIndex(){return levels.findIndex(l=>levelFor(state.xp)===l)}
+function render(){
+ const l=levelFor(state.xp); const next=levels[currentLevelIndex()+1]; const base=l.min; const cap=next?next.min:l.max; const pct=Math.min(100,Math.max(0,((state.xp-base)/(cap-base))*100));
+ document.getElementById('levelName').textContent=l.name; document.getElementById('xpText').textContent=`${state.xp} / ${cap} XP`; document.getElementById('xpBar').style.width=pct+'%'; document.getElementById('xpStat').textContent=state.xp; document.getElementById('completedStat').textContent=state.completed; document.getElementById('waterStat').textContent=state.water.toFixed(0); document.getElementById('totalScore').textContent=state.xp+' XP'; document.getElementById('myLevel').textContent=l.name; document.getElementById('planet').src=A+l.planet; document.getElementById('levelPill').textContent=`Level ${currentLevelIndex()+1}`;
+ const msgs=['كل خطوة صغيرة بتفرق! 🌍💚','الكوكب بدأ يلاحظ مجهودك! 🌿','أنت بتصنع فرقًا حقيقيًا! 🌳','أصبحت EcoHero! الكوكب فخور بيك! 🏆']; document.getElementById('motivation').textContent=msgs[currentLevelIndex()]; renderBadges(); save();
+}
+function renderBadges(){document.getElementById('badgesGrid').innerHTML=badges.map(b=>{const open=state.xp>=b.min;return `<article class="badge-card ${open?'':'locked'}"><img src="${A+(open?b.open:b.locked)}" alt="${b.title}"><div><h3>${b.title}</h3><p>${open?'تم فتح الوسام! 🎉':b.desc}</p><span class="badge-status">${open?'🔓 مفتوح':'🔒 مقفول'}</span></div></article>`}).join('')}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');clearTimeout(window._toast);window._toast=setTimeout(()=>el.classList.remove('show'),2200)}
+function navigate(page){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===page));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo({top:0,behavior:'smooth'})}
+function pickChallenge(){let pool=challenges.filter(c=>c.id!==state.lastChallenge&&!state.completedIds.includes(c.id));if(!pool.length)pool=challenges.filter(c=>c.id!==state.lastChallenge);challenge=pool[Math.floor(Math.random()*pool.length)];state.lastChallenge=challenge.id;document.getElementById('challengeCategory').textContent=challenge.cat;document.getElementById('challengeIcon').src=A+challenge.icon;document.getElementById('challengeTitle').textContent=challenge.title;document.getElementById('challengeDescription').textContent=challenge.desc;document.getElementById('speakChallenge').disabled=false;document.getElementById('completeChallenge').disabled=false;toast('اتحداك تكمّل التحدي! 🚀');}
+function complete(){if(!challenge)return;const oldLevel=currentLevelIndex();state.xp+=10;state.completed++;if(!state.completedIds.includes(challenge.id))state.completedIds.push(challenge.id);document.getElementById('completeChallenge').disabled=true;document.getElementById('speakChallenge').disabled=true;render();toast('مبروك! +10 XP 🎉');if(state.xp>=150&&oldLevel<3)showBadge('hero');else if(state.xp>=100&&oldLevel<2)showBadge('recycle');else if(state.xp>=50&&oldLevel<1)showBadge('tree');else if(state.xp>=20&&oldLevel<1)showBadge('water');document.querySelector('.planet-wrap').classList.add('pop');setTimeout(()=>document.querySelector('.planet-wrap').classList.remove('pop'),750);if(state.sound){const a=new Audio(A+'success.wav');a.volume=.5;a.play().catch(()=>{})}}
+function showBadge(id){const b=badges.find(x=>x.id===id);document.getElementById('modalBadgeImg').src=A+b.open;document.getElementById('modalBadgeTitle').textContent='وسام جديد! 🎉';document.getElementById('modalBadgeText').textContent=`فتحت ${b.title}. استمر، أنت بتقرب من EcoHero!`;document.getElementById('badgeModal').classList.remove('hidden')}
+function speak(){if(!challenge||!('speechSynthesis' in window))return toast('المتصفح لا يدعم قراءة النص بصوت.');speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(challenge.title);u.lang='ar-EG';u.rate=.9;speechSynthesis.speak(u)}
+document.addEventListener('click',e=>{const page=e.target.closest('[data-page]');if(page)navigate(page.dataset.page);const close=e.target.closest('[data-close]');if(close)document.getElementById(close.dataset.close).classList.add('hidden')});
+document.getElementById('getChallenge').onclick=pickChallenge;document.getElementById('completeChallenge').onclick=complete;document.getElementById('speakChallenge').onclick=speak;document.getElementById('calculateWater').onclick=()=>{const m=Number(document.getElementById('minutes').value);if(!m||m<0)return toast('اكتب عدد الدقائق أولًا 💧');const saved=m*6;state.water+=saved;document.getElementById('waterResult').textContent=`🎉 وفرت حوالي ${saved.toFixed(0)} لتر من المياه! 💧`;save();render();toast('تم حفظ توفير المياه في تقدمك! 🌱')};
+document.querySelectorAll('[data-tip]').forEach(b=>b.onclick=()=>document.getElementById('recycleTip').textContent=tips[b.dataset.tip]);
+document.getElementById('soundBtn').onclick=()=>{state.sound=!state.sound;document.getElementById('soundBtn').textContent=state.sound?'🔊':'🔇';save()};document.getElementById('resetBtn').onclick=()=>{if(confirm('متأكد إنك عايز تبدأ من الصفر؟')){localStorage.removeItem('ecoHeroState');location.reload()}};
+render();document.getElementById('soundBtn').textContent=state.sound?'🔊':'🔇';
